@@ -1,0 +1,32 @@
+workflow:
+sign up:
+	gather data:
+		KYC:
+			First Name
+			Last Name
+			email: UNIQUE
+			mobile Phone
+		
+	generate account:
+		Create Mneomonic
+		Create Wallet
+		Buy eth ... use INFURA
+		Create Genesis Block
+		
+LogIn:
+	Upload Image - workflow
+	
+		Send To DB ... (IPFS, Firebase ... it doesn't matter)
+			Get PK from database
+		Create Blockchain
+		Create Block
+			id,
+			time stamp
+			Data:
+				PK from Database
+			Block Hash
+		Add Block to Blockchain
+		
+	Navigate Blockchain - workflow
+	or should this be on ethereum???
+	
