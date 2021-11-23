@@ -1,5 +1,5 @@
 <p align="center" width="100%">
-    <img width="50%" src="https://user-images.githubusercontent.com/84649228/142571329-c6b3edd1-e85f-4fa5-ae32-3f2670c62de0.png"> 
+    <img width="70%" src="https://user-images.githubusercontent.com/84649228/142973400-cb83b9d0-2d0f-4ee0-a043-ae8b7fdbbe6b.png"> 
 </p>
 
 Taxation is a concept that has been around for thousands of years. Organized taxation has been referenced in the Bible and seen in ancient Egyptian records dated back to 3000 BC. No matter how much time has passed, governments continue to tax their citizens. As we move into the new age of technology, we move into an era where we can do things instantaneously, so why not make your tax process a breeze. Write-Off Warrior holds taxpayers accountable for their transactions, as well as helping taxpayers take the most deductions using blockchain technology.
