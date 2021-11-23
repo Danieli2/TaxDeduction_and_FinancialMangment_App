@@ -6,12 +6,22 @@ from dataclasses import dataclass
 from typing import Any, List
 import pandas as pd
 import hashlib
+import requests
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-# Import required libraries
+# Import infura API info
+load_dotenv()
+infura_id = os.getenv("INFURA_WOW_ID")
+infura_private = os.getenv("INFURA_WOW_PRIVATE")
+
+# Our RecordDeduction Class
 @dataclass
 class RecordDeduction:
     deduction_amount: float
     deduction_type: str
+    receipt_hash: str
 
 # Our Block class
 @dataclass
@@ -52,13 +62,44 @@ class StockChain:
 
 # Add text titles to the web page
 st.markdown("# Write-Off Warrior")
+
+st.subheader("Upload Receipt Picture")
+image_file = st.file_uploader("Upload Images", type=["png","jpg","jpeg"])
+
+if image_file is not None:
+
+	# To See details
+	file_details = {"filename":image_file.name, "filetype":image_file.type,
+                              "filesize":image_file.size}
+	st.write(file_details)
+
+    # To View Uploaded Image
+if image_file is not None:
+    st.image(image_file, width=250)
+
+    # Save image to temp Dir
+    with open(os.path.join("Receipts",image_file.name), "wb") as f:
+        f.write(image_file.getbuffer())
+
+        st.success("File Saved")
+    path = (f"Receipts/{image_file.name}")
+    ipfs_file ={
+        'file' : path
+    }
+    # Send file to Infura
+    response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=ipfs_file, auth=(infura_id,infura_private))
+    st.write(response.text)
+    
 st.markdown("## Enter Your Deductable Purchase Below:")
 
-# Add an input area for the buyer
+# Add an input area for the deduction amount
 deduction_amount = st.text_input("Deduction Amount")
 
-# Add an input area for the seller
+# Add an input area for the deduction type
 deduction_type = st.text_input("Deduction Type")
+
+# Add an input area for receipt hash
+receipt_hash = st.text_input("Receipt Hash")
 
 
 # Set up the web app for deployment (including running the StockChain class)
