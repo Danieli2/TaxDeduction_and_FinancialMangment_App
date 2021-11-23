@@ -19,6 +19,7 @@ class RecordTransaction:
     description: str
     receipt: str
     occupation: str
+    quarter: str
 
 # Our Block class
 @dataclass
@@ -71,14 +72,15 @@ if page == 'Self-Employed':
     occupation = st.text_input('What is your business?')
     type = st.selectbox(
     'Type of Deduction',
-    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
+    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
 )
     description = st.text_input("Description of Purchase")
     amount = st.text_input("Amount")
     receipt = st.text_input("Receipt Hash")
+    quarter = st.text_input("What quarter does this deduction affect?")
 
 elif page == 'Small Business Owner':
-    occupation = st.text_input("What is your occupation?")
+    occupation = st.text_input("What is your business?")
     type = st.selectbox(
     'Type of Deduction',
     ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
@@ -101,7 +103,7 @@ else:
 @st.cache(allow_output_mutation=True)
 def setup():
     genesis_block = Block(
-        record=RecordTransaction(amount=0, type="N/a", description="N/A", receipt="N/A", occupation="N/A")
+        record=RecordTransaction(amount=0, type="N/a", description="N/A", receipt="N/A", occupation="N/A", quarter = "N/A")
     )
     return StockChain([genesis_block])
 
@@ -119,7 +121,7 @@ if st.button("Add Block"):
     # Create a `new_block` so that shares, buyer_id, and seller_id from the user input are recorded as a new block
     new_block = Block(
         # data=input_data,
-        record=RecordTransaction(amount, type, description, receipt, occupation),
+        record=RecordTransaction(amount, type, description, receipt, occupation, quarter),
         prev_hash=prev_block_hash
     )
 
