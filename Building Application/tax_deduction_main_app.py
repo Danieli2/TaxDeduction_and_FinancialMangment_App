@@ -18,6 +18,7 @@ class RecordTransaction:
     type: str
     description: str
     receipt: str
+    occupation: str
 
 # Our Block class
 @dataclass
@@ -57,28 +58,50 @@ class StockChain:
         self.chain += [block]
 
 # Add text titles to the web page
-st.markdown("# Write-Off Warrior")
-st.markdown("## Enter Your Deductable Purchase Below:")
+st.markdown("# Welcome to Write-Off Warrior")
+st.markdown("In order for us to assist you, please fill out the information below. ")
 
-# Add an input area for the buyer
+##
+page_names= ['Self-Employed', 'Small Business Owner','Employed by an Institution']
+page= st.radio ('What is your employment status?', page_names)
+st.write("**Your employment status is:**", page)
 
 
-# Add an input area for the seller
-type = st.selectbox(
+if page == 'Self-Employed':
+    occupation = st.text_input('What is your business?')
+    type = st.selectbox(
     'Type of Deduction',
-    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Meals & Entertainment Expenses', 'Home Office Deduction')
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
 )
+    description = st.text_input("Description of Purchase")
+    amount = st.text_input("Amount")
+    receipt = st.text_input("Receipt Hash")
 
-description = st.text_input("Description of Purchase")
-amount = st.text_input("Amount")
-
-receipt = st.text_input("Receipt Hash")
+elif page == 'Small Business Owner':
+    occupation = st.text_input("What is your occupation?")
+    type = st.selectbox(
+    'Type of Deduction',
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
+)
+    description = st.text_input("Description of Purchase")
+    amount = st.text_input("Amount")
+    receipt = st.text_input("Receipt Hash")
+    
+else:
+    occupation = st.selectbox('What is your occupation?',
+    ('Teacher', 'Other'))
+    type = st.selectbox('Type of Deduction',
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees'))
+    description = st.text_input("Description of Purchase")
+    amount = st.text_input("Amount")
+    receipt = st.text_input("Receipt Hash")
+   
 
 # Set up the web app for deployment (including running the StockChain class)
 @st.cache(allow_output_mutation=True)
 def setup():
     genesis_block = Block(
-        record=RecordTransaction(amount=0, type="N/a", description="N/A", receipt="N/A")
+        record=RecordTransaction(amount=0, type="N/a", description="N/A", receipt="N/A", occupation="N/A")
     )
     return StockChain([genesis_block])
 
@@ -96,7 +119,7 @@ if st.button("Add Block"):
     # Create a `new_block` so that shares, buyer_id, and seller_id from the user input are recorded as a new block
     new_block = Block(
         # data=input_data,
-        record=RecordTransaction(amount, type, description, receipt),
+        record=RecordTransaction(amount, type, description, receipt, occupation),
         prev_hash=prev_block_hash
     )
 
