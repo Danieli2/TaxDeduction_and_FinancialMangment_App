@@ -1,3 +1,7 @@
+'''
+J.Guanzon: Added a dropdown menu for the types of deduction that could be taken. 
+'''
+
 # Import required libraries
 from numpy.core.records import record
 import streamlit as st
@@ -9,24 +13,25 @@ import hashlib
 import requests
 import os
 from dotenv import load_dotenv
-# from pathlib import Path
 
-# Import infura API info
+# Import infura API info(SW: At some point need to figure out how to get Infura API info to talk to app w/o showing it on github)
 load_dotenv()
 infura_id = os.getenv("INFURA_WOW_ID")
 infura_private = os.getenv("INFURA_WOW_PRIVATE")
 
-# Our RecordDeduction Class
 @dataclass
-class RecordDeduction:
-    deduction_amount: float
-    deduction_type: str
-    receipt_hash: str
+class RecordTransaction:
+    amount: float
+    type: str
+    description: str
+    receipt: str
+    occupation: str
+    quarter: str
 
 # Our Block class
 @dataclass
 class Block:
-    record: RecordDeduction
+    record: RecordTransaction
     trade_time: str = datetime.utcnow().strftime("%H:%M:%S")
     prev_hash: str = 0
 
@@ -61,8 +66,7 @@ class StockChain:
         self.chain += [block]
 
 # Add text titles to the web page
-st.markdown("# Write-Off Warrior")
-
+st.markdown("# Welcome to Write-Off Warrior")
 st.subheader("Upload Receipt Picture")
 image_file = st.file_uploader("Upload Images", type=["png","jpg","jpeg"])
 
@@ -89,24 +93,50 @@ if image_file is not None:
     # Send file to Infura
     response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=ipfs_file, auth=(infura_id,infura_private))
     st.write(response.text)
+st.markdown("In order for us to assist you, please fill out the information below. ")
+
+##
+page_names= ['Self-Employed', 'Small Business Owner','Employed by an Institution']
+page= st.radio ('What is your employment status?', page_names)
+st.write("**Your employment status is:**", page)
+
+
+if page == 'Self-Employed':
+    occupation = st.text_input('What is your business?')
+    type = st.selectbox(
+    'Type of Deduction',
+    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
+)
+    description = st.text_input("Description of Purchase")
+    amount = st.text_input("Amount")
+    receipt = st.text_input("Receipt Hash")
+    quarter = st.text_input("What quarter does this deduction affect?")
+
+elif page == 'Small Business Owner':
+    occupation = st.text_input("What is your business?")
+    type = st.selectbox(
+    'Type of Deduction',
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
+)
+    description = st.text_input("Description of Purchase")
+    amount = st.text_input("Amount")
+    receipt = st.text_input("Receipt Hash")
     
-st.markdown("## Enter Your Deductable Purchase Below:")
-
-# Add an input area for the deduction amount
-deduction_amount = st.text_input("Deduction Amount")
-
-# Add an input area for the deduction type
-deduction_type = st.text_input("Deduction Type")
-
-# Add an input area for receipt hash
-receipt_hash = st.text_input("Receipt Hash")
-
+else:
+    occupation = st.selectbox('What is your occupation?',
+    ('Teacher', 'Other'))
+    type = st.selectbox('Type of Deduction',
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees'))
+    description = st.text_input("Description of Purchase")
+    amount = st.text_input("Amount")
+    receipt = st.text_input("Receipt Hash")
+   
 
 # Set up the web app for deployment (including running the StockChain class)
 @st.cache(allow_output_mutation=True)
 def setup():
     genesis_block = Block(
-        record=RecordDeduction(deduction_amount=0, deduction_type="N/a", receipt_hash="N/a")
+        record=RecordTransaction(amount=0, type="N/a", description="N/A", receipt="N/A", occupation="N/A", quarter = "N/A")
     )
     return StockChain([genesis_block])
 
@@ -124,7 +154,7 @@ if st.button("Add Block"):
     # Create a `new_block` so that shares, buyer_id, and seller_id from the user input are recorded as a new block
     new_block = Block(
         # data=input_data,
-        record=RecordDeduction(deduction_amount, deduction_type, receipt_hash),
+        record=RecordTransaction(amount, type, description, receipt, occupation, quarter),
         prev_hash=prev_block_hash
     )
 
@@ -138,11 +168,11 @@ if st.button("Add Block"):
 if st.button("Check Total Deductions"):
     total_deductions = 0.0
     for block in stockchain_live.chain:
-        total_deductions += float(block.record.deduction_amount)
+        total_deductions += float(block.record.amount)
     st.write(total_deductions)
 
 # Add a title for the chain display section
-st.markdown("## The Blockchain Ledger")
+st.markdown("## The Stockchain Ledger")
 
 # Save the data from the blockchain as a DataFrame
 stockchain_df = pd.DataFrame(stockchain_live.chain)
