@@ -1,29 +1,44 @@
 pragma solidity ^0.5.0;
 
 contract WOWToken {
-    address payable owner = msg.sender;
-    string public symbol = "WoW";
-    uint public exchange_rate = 1;
-
-    mapping(address => uint) balances;
-
-    function balance() public view returns(uint) {
-        return balances[msg.sender];
+    mapping(address => uint) public balances;
+    mapping(address => mapping(address => uint)) public allowance;
+    uint public totalSupply = 10000000000;
+    string public name = 'WOWToken';
+    string public symbol = 'WOW';
+    uint public decimals = 18;
+    
+    event Transfer(address indexed from, address indexed to, uint value);
+    event Approval(address indexed owener, address indexed spender, uint value);
+    
+constructor() public{
+        balances[msg.sender] = totalSupply;
     }
 
-    function transfer(address recipient, uint value) public {
+    function balanceOf(address owner) public view returns(uint) {
+        return balances[owner];
+    }
+    
+    function transfer(address to, uint value) public returns(bool) {
+        require(balanceOf(msg.sender)>= value, 'You are broke lol');
+        balances[to] += value;
         balances[msg.sender] -= value;
-        balances[recipient] += value;
+        emit Transfer(msg.sender, to, value);
+        return true;
+        }
+    
+    function transferFrom(address from, address to, uint value) public returns(bool) {
+        require(balanceOf(from) >= value, 'You broke');
+        require(allowance[from][msg.sender] >= value, 'allowance too low');
+        balances[to] += value;
+        balances[from] -= value;
+        emit Transfer(from, to, value);
+        return true;
     }
-
-    function purchase() public payable {
-        uint amount = msg.value * exchange_rate;
-        balances[msg.sender] += amount;
-        owner.transfer(msg.value);
-    }
-
-    function mint(address recipient, uint value) public {
-        require(msg.sender == owner, "You do not have permission to mint tokens!");
-        balances[recipient] += value;
+    
+    function approve(address spender, uint value) public returns(bool) {
+        allowance[msg.sender][spender] = value;
+        emit Approval(msg.sender, spender, value);
+        return true;
     }
 }
