@@ -105,7 +105,7 @@ if page == 'Self-Employed':
     occupation = st.text_input('What is your business?')
     type = st.selectbox(
     'Type of Deduction',
-    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
+    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', "Other")
 )
     description = st.text_input("Description of Purchase")
     amount = st.text_input("Amount")
@@ -116,20 +116,22 @@ elif page == 'Small Business Owner':
     occupation = st.text_input("What is your business?")
     type = st.selectbox(
     'Type of Deduction',
-    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', "Other")
 )
     description = st.text_input("Description of Purchase")
     amount = st.text_input("Amount")
     receipt = st.text_input("Receipt Hash")
+    quarter = st.text_input("What quarter does this deduction affect? Please put 0 if not applicable")
     
 else:
     occupation = st.selectbox('What is your occupation?',
     ('Teacher', 'Other'))
     type = st.selectbox('Type of Deduction',
-    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees'))
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', "Other"))
     description = st.text_input("Description of Purchase")
     amount = st.text_input("Amount")
     receipt = st.text_input("Receipt Hash")
+    quarter = st.text_input("What quarter does this deduction affect? Please put 0 if not applicable")
    
 
 # Set up the web app for deployment (including running the StockChain class)
