@@ -21,13 +21,14 @@ infura_private = os.getenv("INFURA_WOW_PRIVATE")
 
 @dataclass
 class RecordTransaction:
-    date: str
-    amount: float
-    type: str
-    description: str
     receipt: str
     occupation: str
+    type: str
     quarter: str
+    date: str
+    amount: float
+    description: str
+    
 
 # Our Block class
 @dataclass
@@ -68,50 +69,14 @@ class StockChain:
 
 # Add text titles to the web page
 st.title("Welcome to Write-Off Warrior")
-st.markdown("In order for us to assist you, please fill out the information below. ")
-
+st.markdown("In order for us to assist you, please fill out the information below for each transaction.")
+st.markdown("As a reminder, please upload your bank statements by the 8th business day of the month for reconciling. For bank statement, please select 'Other' as your deduction type, use the ending balance for the amount field, and 'Bank Statement-Month Year' as your description. ")
 ##
 page_names= ['Self-Employed', 'Small Business Owner','Employed by an Institution']
 page= st.radio ('What is your employment status?', page_names)
 st.write("**Your employment status is:**", page)
 
-
-if page == 'Self-Employed':
-    occupation = st.text_input('What is your business? Please provide name and industry.')
-    type = st.selectbox(
-    'Type of Deduction',
-    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
-)
-    quarter = st.selectbox("What quarter does this deduction affect?", ("Q1","Q2", "Q3", "Q4"))
-    date = st.date_input("Date of Transaction")
-    amount = st.text_input("Amount")
-    description = st.text_input("Description of Purchase")
-    receipt = st.text_input("Receipt Hash")
-    
-
-elif page == 'Small Business Owner':
-    occupation = st.text_input('What is your business? Please provide name and industry.')
-    type = st.selectbox(
-    'Type of Deduction',
-    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees')
-)
-    quarter = st.selectbox("What quarter does this deduction affect?", ("Q1","Q2", "Q3", "Q4"))
-    date = st.date_input("Date of Transaction")
-    amount = st.text_input("Amount")
-    description = st.text_input("Description of Purchase")
-    receipt = st.text_input("Receipt Hash")
-    
-else:
-    occupation = st.selectbox('What is your occupation?',
-    ('Teacher', 'Construction Worker','Real Estate Agent', 'Student', 'Other'))
-    type = st.selectbox('Type of Deduction',
-    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', 'Student Loan Interest'))
-    description = st.text_input("Description of Purchase")
-    amount = st.text_input("Amount")
-    receipt = st.text_input("Receipt Hash")
-    quarter = st.selectbox("What quarter does this deduction affect?", ["None"])
-
-st.subheader("Upload Receipt Picture")
+st.subheader("Upload Receipt (PNG, JPG, JPEG)")
 image_file = st.file_uploader("Upload Images", type=["png","jpg","jpeg"])
 
 if image_file is not None:
@@ -137,13 +102,55 @@ if image_file is not None:
     # Send file to Infura
     response = requests.post('https://ipfs.infura.io:5001/api/v0/add', files=ipfs_file, auth=(infura_id,infura_private))
     st.write(response.text)
+
+if page == 'Self-Employed':
+    receipt = st.text_input("Receipt Hash")
+    occupation = st.text_input('What is your business? Please provide name and industry (Ex: Business Name-Industry Type).')
+    type = st.selectbox(
+    'Type of Deduction',
+    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', 'Other')
+)
+    quarter = st.selectbox("What quarter does this deduction affect?", ("Q1","Q2", "Q3", "Q4"))
+    date = st.date_input("Date of Transaction")
+    amount = st.text_input("Amount")
+    description = st.text_input("Description of Purchase")
+    
+    
+
+elif page == 'Small Business Owner':
+    receipt = st.text_input("Receipt Hash")
+    occupation = st.text_input('What is your business? Please provide name and industry (Ex: Business Name-Industry Type).')
+    type = st.selectbox(
+    'Type of Deduction',
+    ('Vehicle Expense', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', "Other")
+)
+    quarter = st.selectbox("What quarter does this deduction affect?", ("Q1","Q2", "Q3", "Q4"))
+    date = st.date_input("Date of Transaction")
+    amount = st.text_input("Amount")
+    description = st.text_input("Description of Purchase")
+    
+    
+else:
+    receipt = st.text_input("Receipt Hash")
+    occupation = st.selectbox('What is your occupation?',
+    ('Teacher', 'Construction Worker','Real Estate Agent', 'Student', 'Other'))
+    type = st.selectbox('Type of Deduction',
+    ('Vehicle Expense', 'Educator Expense (max $250)', 'Employee Pay', 'Travel, Meals, Entertainment Expenses', 'Home Office Deduction', 'Office Supplies','Memberships Dues/Fees', 'Student Loan Interest', 'Other'))
+    quarter = st.selectbox("What quarter does this deduction affect?", ["None"])
+    date = st.date_input("Date of Transaction")
+    amount = st.text_input("Amount")
+    description = st.text_input("Description of Purchase")
+    
+    
+
+
    
 
 # Set up the web app for deployment (including running the StockChain class)
 @st.cache(allow_output_mutation=True)
 def setup():
     genesis_block = Block(
-        record=RecordTransaction(amount=0, type="N/a", description="N/A", receipt="N/A", occupation="N/A", quarter = "N/A", date = "N/A")
+        record=RecordTransaction(receipt="N/A", occupation="N/A", type="N/a", quarter = "N/A", date = "N/A", amount=0, description="N/A")
     )
     return StockChain([genesis_block])
 
@@ -161,7 +168,7 @@ if st.button("Add Block"):
     # Create a `new_block` so that shares, buyer_id, and seller_id from the user input are recorded as a new block
     new_block = Block(
         # data=input_data,
-        record=RecordTransaction(amount, type, description, receipt, occupation, quarter, date),
+        record=RecordTransaction(receipt, occupation, type, quarter, date, amount, description),
         prev_hash=prev_block_hash
     )
 
