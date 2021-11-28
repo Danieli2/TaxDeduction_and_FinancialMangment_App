@@ -3,8 +3,15 @@ import pandas as pd
 import hashlib
 import sqlite3
 import streamlit.components.v1 as stc
+import requests
+import os
+from numpy.core.records import record
+from datetime import datetime
+from dataclasses import dataclass
+from typing import Any, List
+from dotenv import load_dotenv
 
-#global st
+
 
 # Security
 def make_hashes(password):
@@ -64,18 +71,6 @@ def main():
 
 			result = login_user(username,check_hashes(password,hashed_pswd))
 			if result:
-				# Import required libraries
-				from numpy.core.records import record
-				
-				from datetime import datetime
-				from dataclasses import dataclass
-				from typing import Any, List
-				
-				import hashlib
-				import requests
-				import os
-				from dotenv import load_dotenv
-
 				# Import infura API info(SW: At some point need to figure out how to get Infura API info to talk to app w/o showing it on github)
 				load_dotenv()
 				infura_id = os.getenv("INFURA_WOW_ID")
