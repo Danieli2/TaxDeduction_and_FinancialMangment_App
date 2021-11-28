@@ -79,7 +79,7 @@ def main():
 			prev_hash TEXT,
 			username TEXT,
 			FOREIGN KEY (username) REFERENCES userstable(username))''')
-			
+
 			hashed_pswd = make_hashes(password)
 
 			result = login_user(username,check_hashes(password,hashed_pswd))
@@ -146,8 +146,28 @@ def main():
 				@dataclass
 				class BuildingBlock:
 					record: RecordTransaction
-					trade_time: str = datetime.utcnow().strftime("%H:%M:%S")
-					prev_hash: str = 0
+					trade_time: str
+					prev_hash: str
+
+					def hash_block1(self):
+						# Declare a hashing algorithm
+						sha = hashlib.sha256()
+
+						# Encode the time of trade
+						trade_time_encoded = self.trade_time.encode()
+						# Add the encoded trade time into the hash
+						sha.update(trade_time_encoded)
+
+						# Encode the Record class
+						record = str(self.record).encode()
+						# Then hash it
+						sha.update(record)
+
+						prev_hash = str(self.prev_hash).encode()
+						sha.update(prev_hash)
+
+						# Return the hash to the rest of the Block class
+						return sha.hexdigest()
 
 				# Our StockChain class
 				from typing import List
@@ -155,6 +175,14 @@ def main():
 				class StockChain:
 					# The class `StockChain` holds a list of blocks
 					chain: List[Block]
+					# The function `add_block` adds any new `block` to the `chain` list
+					def add_block(self, block):
+						self.chain += [block]
+				
+				@dataclass
+				class BuildingChain:
+					# The class `StockChain` holds a list of blocks
+					chain: List[BuildingBlock]
 					# The function `add_block` adds any new `block` to the `chain` list
 					def add_block(self, block):
 						self.chain += [block]
@@ -231,14 +259,33 @@ def main():
 				def setup():
 					# Try to see if user already has a table
 					# c.execute('''SELECT name FROM sqlite_master WHERE type='table' AND name="userstable"''')
-					c.execute('''SELECT * FROM chaintable INNER JOIN userstable ON chaintable.username = userstable.username;''')
-					resso = c.fetchall()
-					for row in resso:
-						st.write(row)
-					genesis_block = Block(
-						record=RecordTransaction(amount=0, ded_type="N/a", description="N/A", receipt="N/A", occupation="N/A", quarter = "N/A")
-					)
-					return StockChain([genesis_block])
+					# c.execute('''SELECT * FROM chaintable INNER JOIN userstable ON chaintable.username = userstable.username;''')
+					# resso = c.fetchall()
+					# for row in resso:
+					# 	st.write(row)
+
+					# Try to unpickle a file and rebuild the StockChain
+					try:
+						unpickled_df = pd.read_pickle(f"pickles/{username}")
+						re_record = RecordTransaction(
+							amount=unpickled_df.iloc[-1,0],
+							ded_type = unpickled_df.iloc[-1,1],
+							description = unpickled_df.iloc[-1, 2],
+							receipt = unpickled_df.iloc[-1,3],
+							occupation = unpickled_df.iloc[-1,4],
+							quarter = unpickled_df.iloc[-1, 5]
+						)
+						regenesis_block = BuildingBlock(
+							record = re_record,
+							trade_time = unpickled_df.iloc[-1, 6],
+							prev_hash = unpickled_df.iloc[-1, 7]	
+						)
+						return BuildingChain([regenesis_block])
+					except:	
+						genesis_block = Block(
+							record=RecordTransaction(amount=0, ded_type="N/a", description="N/A", receipt="N/A", occupation="N/A", quarter = "N/A")
+						)
+						return StockChain([genesis_block])
 
 				# Serve the web app
                 
@@ -250,7 +297,10 @@ def main():
 					prev_block = stockchain_live.chain[-1]
 
 					# Hash the original block (to put into the next block)
-					prev_block_hash = prev_block.hash_block()
+					if prev_block == type(BuildingBlock):
+						prev_block_hash = prev_block.hash_block1()
+					else:
+						prev_block_hash = prev_block.hash_block()
 
 					# Create a `new_block` so that shares, buyer_id, and seller_id from the user input are recorded as a new block
 					new_block = Block(
@@ -262,10 +312,22 @@ def main():
 					# Add the new_block to the existing chain
 					stockchain_live.add_block(new_block)
                     # print(new_block)
-                    
+
+					# Save the chain as a df and pickle
+					stockchain_df = pd.DataFrame(stockchain_live.chain)
+					stockchain_df.loc[:,"username"] = username
+					chain_recs = stockchain_df["record"]
+					chain_df = pd.DataFrame(list(chain_recs))
+					chain_df_no_recs = stockchain_df.drop(columns="record")
+					full_chain_df= pd.concat([chain_df, chain_df_no_recs],axis=1)
+				# pickle_file = open(f"username", 'wb')
+				# pickled_info = pickle.dumps(full_chain_df)
+					full_chain_df.to_pickle(f"pickles/{username}")
+					unpickled_df = pd.read_pickle(f"pickles/{username}")
+					st.write(unpickled_df.iloc[-1, 0])
+
 					# latest_chain = stockchain_live
-					# pickle_file = open(f"username", 'wb')
-					# pickled_info = pickle.dumps(latest_chain)
+					
 					# c.execute('''INSERT INTO userstable(chain) VALUES (?)''', latest_chain)
 					# st.text(type(latest_chain))
 					# st.text(username)
@@ -276,9 +338,22 @@ def main():
 					st.balloons()
 
 				if st.button("unpickle chain"):
-					pinfo = c.execute('''SELECT chain FROM userstable''')
-					# unpickle = pickle.loads(pinfo)
-					st.write(c.fetchall)
+					unpickled_df = pd.read_pickle(f"pickles/{username}")
+					re_record = RecordTransaction(
+							amount=unpickled_df.iloc[-1,0],
+							ded_type = unpickled_df.iloc[-1,1],
+							description = unpickled_df.iloc[-1, 2],
+							receipt = unpickled_df.iloc[-1,3],
+							occupation = unpickled_df.iloc[-1,4],
+							quarter = unpickled_df.iloc[-1, 5]
+						)
+					
+					regenesis_block = BuildingBlock(
+					record = re_record,
+					trade_time= unpickled_df.iloc[-1,6],
+					prev_hash= unpickled_df.iloc[-1,7]	
+					)
+					return BuildingChain([regenesis_block])
 
 				# Attempt a button to check shares
 				if st.button("Check Total Deductions"):
@@ -300,7 +375,11 @@ def main():
 				chain_df = pd.DataFrame(list(chain_recs))
 				chain_df_no_recs = stockchain_df.drop(columns="record")
 				full_chain_df= pd.concat([chain_df, chain_df_no_recs],axis=1)
-				
+				# pickle_file = open(f"username", 'wb')
+				# pickled_info = pickle.dumps(full_chain_df)
+				full_chain_df.to_pickle(f"pickles/{username}")
+				unpickled_df = pd.read_pickle(f"pickles/{username}")
+				st.write(unpickled_df.iloc[-1, 0])
 				# for row in chain_recs:
 					# amount = []
 					# ded_type = []
@@ -324,30 +403,30 @@ def main():
 
 
 				# Add stockchain_df to SQL table
-				full_chain_df.to_sql('chaintable', con = conn, if_exists='replace')
-				results = c.execute('''SELECT * FROM chaintable''').fetchall()
+				# full_chain_df.to_sql('chaintable', con = conn, if_exists='replace')
+				# results = c.execute('''SELECT * FROM chaintable''').fetchall()
 
-				st.write(results)
+				# st.write(results)
 
 				# Trying to rebuild blockchain from df
-				chain_recs = stockchain_df["record"]
-				chain_time = stockchain_df["trade_time"]
-				chain_hash = stockchain_df["prev_hash"]
-				for rec in chain_recs:
-					old_recs = RecordTransaction(amount=rec["amount"],
-					ded_type=rec['ded_type'],
-					description=rec["description"],
-					receipt=rec['receipt'],
-					occupation=rec['occupation'],
-					quarter=rec['quarter'])
-					# st.write(old_recs)
-				for block in stockchain_df:
-					building_blocks = BuildingBlock(
-						record = old_recs,
-						trade_time = stockchain_df["trade_time"],
-						prev_hash = stockchain_df["prev_hash"],
-					)
-				st.write(building_blocks.record)
+				# chain_recs = stockchain_df["record"]
+				# chain_time = stockchain_df["trade_time"]
+				# chain_hash = stockchain_df["prev_hash"]
+				# for rec in chain_recs:
+				# 	old_recs = RecordTransaction(amount=rec["amount"],
+				# 	ded_type=rec['ded_type'],
+				# 	description=rec["description"],
+				# 	receipt=rec['receipt'],
+				# 	occupation=rec['occupation'],
+				# 	quarter=rec['quarter'])
+				# 	# st.write(old_recs)
+				# for block in stockchain_df:
+				# 	building_blocks = BuildingBlock(
+				# 		record = old_recs,
+				# 		trade_time = stockchain_df["trade_time"],
+				# 		prev_hash = stockchain_df["prev_hash"],
+					# )
+				# st.write(building_blocks.record)
 
 				# stock_json = stockchain_df.to_json()
 
