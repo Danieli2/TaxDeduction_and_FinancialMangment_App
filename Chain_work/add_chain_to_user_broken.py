@@ -406,8 +406,8 @@ def main():
 				stockchain_df = pd.DataFrame(stockchain_live.chain)
 				stockchain_df.loc[:,"username"] = username
 				# recs = stockchain_df
-				st.write(stockchain_df)
-				st.write(stockchain_df["record"])
+				# st.write(stockchain_df)
+				# st.write(stockchain_df["record"])
 				chain_recs = stockchain_df["record"]
 				chain_df = pd.DataFrame(list(chain_recs))
 				chain_df_no_recs = stockchain_df.drop(columns="record")
@@ -416,7 +416,8 @@ def main():
 				# pickled_info = pickle.dumps(full_chain_df)
 				full_chain_df.to_pickle(f"pickles/{username}")
 				unpickled_df = pd.read_pickle(f"pickles/{username}")
-				st.write(unpickled_df.iloc[-1, 0])
+				
+
 				# for row in chain_recs:
 					# amount = []
 					# ded_type = []
@@ -435,7 +436,7 @@ def main():
 				# 		}
 				# 	)
 				# recorddf = pd.DataFrame(record_data)
-				st.write(full_chain_df)
+				
 			
 
 
