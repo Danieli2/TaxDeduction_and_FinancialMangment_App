@@ -1,4 +1,3 @@
-
 import streamlit as st                          # only needed for testing
 import web3
 from web3 import Web3
@@ -18,87 +17,97 @@ import json
 # Infura Kovan Project ID: d7336d8a44fc42a1a9a21662bf242bdb
 # Infura EndPoint for above Project ID: https://kovan.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb
 
-# Request eth from here
-infura_url = "https://kovan.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
-web3_infura = Web3(Web3.HTTPProvider(infura_url))
+# # Request eth from here
+# infura_url = "https://kovan.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
+# web3_infura = Web3(Web3.HTTPProvider(infura_url))
 
 # infura_url_main_net = "https://mainnet.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
 # web3_infura_url_main_net = Web3(Web3.HTTPProvider(infura_url_main_net))
 # infura_project_id = "d7336d8a44fc42a1a9a21662bf242bdb"
 
-# Transactions on ganache
-ganache_url = "HTTP://127.0.0.1:7545"
-web3_ganache = Web3(Web3.HTTPProvider(ganache_url))
+# # Transactions on ganache
+# ganache_url = "HTTP://127.0.0.1:7545"
+# web3_ganache = Web3(Web3.HTTPProvider(ganache_url))
 
-# using for testing
-metamask_account_03 = "0xf1F319e20746155195BC062db8b978969daD4B43"
+# ******************************************************
+#
+#               INFURA STUFF
+#
+# ******************************************************
 
-def is_infura_connected():
+# Check Connection
+def is_infura_connected(web3_infura):
+    return web3_infura.isConnected
+
+# Do Transaction - In production this might be commented out, if not needed
+def transaction_infura(web3_infura, metamask_account_03):
     success = False
     if web3_infura.isConnected():
         st.success("web3 (infura) is connected")
         block = web3_infura.eth.blockNumber
         balance = web3_infura.eth.get_balance(metamask_account_03)
         ether = web3_infura.fromWei(balance, "ether")
-
         success = True
-        return success, block, balance, ether
+        return success, block, metamask_account_03, balance, ether
     else:
-        return success, 0, 0, 0
+        return success, 0, 0, 0, 0
 
-# def token_info(contract_address):
-#     abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"sender","type":"address"},{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"symbol","type":"string"},{"name":"decimals","type":"uint8"},{"name":"totalSupply","type":"uint256"},{"name":"feeReceiver","type":"address"},{"name":"tokenOwnerAddress","type":"address"}],"payable":true,"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}]')
-#     contract = web3_infura.eth.contract(address=contract_address, abi=abi)
-#     print(contract)
-#     # total_supply = web3_infura.eth.contract()
-#     # #.contract(address=contract, abi=abi)
-#     # st.info(contract)
+# ******************************************************
+#
+#               GANACHE STUFF
+#
+# ******************************************************
+def is_ganache_connected(we3_ganaceh):
+    return we3_ganaceh.isConnected
 
-
-def is_ganache_connected():
+def transaction_ganache(web3_ganache, sender_account_ganache, sender_private_key, receiver_account_ganache):
     success = False
     if web3_ganache.isConnected():
         st.success("web3 (ganache) is connected")
-        block = web3_ganache.eth.blockNumber
+        # get tyhe nonce
+        nonce = web3_ganache.eth.get_transaction_count(sender_account_ganache)
+        # # build the transaction json
+        tx = {
+            'nonce' : nonce,
+            'to' : receiver_account_ganache,
+            'value' : web3_ganache.toWei(1, 'ether'),
+            'gas' : 2000000,
+            'gasPrice' : web3_ganache.toWei('50', 'gwei')
+        }
+        # sign transaction
+        signed_tx = web3_ganache.eth.account.signTransaction(tx, sender_private_key)
+        # send transaction
+        tx_hash = web3_ganache.eth.sendRawTransaction(signed_tx.rawTransaction)
+        tx_hash_hex = web3_ganache.toHex(tx_hash)
         success = True
-        return success, block
+        # get transaction hash
+        if (tx_hash):
+            success = True
+            new_block_number = web3_ganache.eth.blockNumber
+            new_balance_sender = web3_ganache.fromWei(web3_ganache.eth.get_balance(sender_account_ganache), 'ether')
+            new_balance_receiver = web3_ganache.fromWei(web3_ganache.eth.get_balance(receiver_account_ganache), 'ether')
+            return success, tx_hash, tx_hash_hex, new_balance_sender, new_balance_receiver, new_block_number
+        else:
+            success = False
+            return success, 0, 0, 0, 0, 0
     else:
-        return success, 0
+        success = False        
+        return success, 0, 0, 0, 0, 0
 
-def transaction_ganache(sender_account_ganache, sender_private_key, receiver_account_ganache):
-    success = False
-    web3_ganache = Web3(Web3.HTTPProvider(ganache_url))
-    # Building Transaction for ganache 
-    # st.warning(sender_account_ganache)
-    # print(web3_ganache.eth.get_balance(sender_account_ganache))
-    # st.warning(receiver_account_ganache)
-    # print(web3_ganache.eth.get_balance(receiver_account_ganache))
-    # get tyhe nonce
-    nonce = web3_ganache.eth.get_transaction_count(sender_account_ganache)
-    # # build the transaction json
-    tx = {
-        'nonce' : nonce,
-        'to' : receiver_account_ganache,
-        'value' : web3_ganache.toWei(1, 'ether'),
-        'gas' : 2000000,
-        'gasPrice' : web3_ganache.toWei('50', 'gwei')
-    }
-    # sign transaction
-    signed_tx = web3_ganache.eth.account.signTransaction(tx, sender_private_key)
-    # send transaction
-    tx_hash = web3_ganache.eth.sendRawTransaction(signed_tx.rawTransaction)
-    tx_hash_hex = web3_ganache.toHex(tx_hash)
-    # get transaction hash
-    if (tx_hash):
-        success = True
-        new_balance_sender = web3_ganache.fromWei(web3_ganache.eth.get_balance(sender_account_ganache), 'ether')
-        new_balance_receiver = web3_ganache.fromWei(web3_ganache.eth.get_balance(receiver_account_ganache), 'ether')
-        return success, tx_hash, tx_hash_hex, new_balance_sender, new_balance_receiver
-    else:
-        success = False
-        return success, 0, 0, 0
-
-
+# def token_info(contract_address, sender, receiver, amount):
+#     st.success("web3 (solidity) is connected")
+#     # abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"sender","type":"address"},{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"symbol","type":"string"},{"name":"decimals","type":"uint8"},{"name":"totalSupply","type":"uint256"},{"name":"feeReceiver","type":"address"},{"name":"tokenOwnerAddress","type":"address"}],"payable":true,"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}]')
+#     abi = json.loads('[{"constant": true,"inputs": [],"name": "name","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "spender","type": "address"},{"name": "value","type": "uint256"}],"name": "approve","outputs": [{"name": "","type": "bool"}],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [],"name": "totalSupply","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": false,"inputs": [{"name": "from", "type": "address"},{"name": "to","type": "address"},{"name": "value","type": "uint256"}],"name": "transferFrom","outputs": [{"name": "","type": "bool"}],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [{"name": "","type": "address"}],"name": "balances","outputs": [{"name": "","type": "uint256"}],"payable": false,"stateMutability": "view", "type": "function"}, {"constant": true, "inputs": [], "name": "decimals", "outputs": [{"name": "", "type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [{"name": "owner", "type": "address"}], "name": "balanceOf", "outputs": [{"name": "", "type": "uint256"}], "payable": false,"stateMutability": "view", "type": "function"},{"constant": true, "inputs": [], "name": "symbol", "outputs": [{"name": "", "type": "string"}], "payable": false, "stateMutability": "view", "type": "function"}, {"constant": false, "inputs": [{"name": "to", "type": "address"}, {"name": "value","type": "uint256"}], "name": "transfer", "outputs": [{"name": "", "type": "bool"}],"payable": false, "stateMutability": "nonpayable", "type": "function"},{"constant": true, "inputs": [{ "name": "", "type": "address"},{"name": "","type": "address"}],"name": "allowance","outputs": [{"name": "", "type": "uint256"}], "payable": false, "stateMutability": "view", "type": "function"},{"inputs": [], "payable": false,"stateMutability": "nonpayable", "type": "constructor"},{"anonymous": false, "inputs": [{"indexed": true, "name": "from","type": "address"}, {"indexed": true,"name": "to", "type": "address"}, {"indexed": false,"name": "value", "type": "uint256"}],"name": "Transfer","type": "event"},{"anonymous": false, "inputs": [{"indexed": true,"name": "owner","type": "address"},{"indexed": true,"name": "spender","type": "address"},{"indexed": false, "name": "value", "type": "uint256"}],"name": "Approval", "type": "event"}]')
+#     contract = web3_infura.eth.contract(address=contract_address, abi=abi)
+# #    print(contract)
+#     result = contract.functions.transferFrom(sender, receiver, amount).call()
+#     if result:
+#         st.success("web3 (Solidity Success)")
+#     else:
+#         st.error("Failed")
+# #     # total_supply = web3_infura.eth.contract()
+# #     # #.contract(address=contract, abi=abi)
+# #     # st.info(contract)
 
 # ==================================================
 # # def is_wallet_installed():
