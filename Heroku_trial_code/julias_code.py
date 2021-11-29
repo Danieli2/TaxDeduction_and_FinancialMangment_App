@@ -58,7 +58,7 @@ class StockChain:
         self.chain += [block]
 
 # Add text titles to the web page
-st.markdown("# Write-Off Warrior")
+st.markdown("# Write-Off Warrior Test")
 st.markdown("## Enter Your Deductable Purchase Below:")
 
 # Add an input area for the buyer
