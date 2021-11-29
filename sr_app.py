@@ -39,20 +39,20 @@ if choice == "Welcome":
         st.error("Infura is not connected")
     time.sleep(1)
 
-    # # Example: Reading A Contract (Shib Inu) - **************************
-    # contract_address = "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce"
-    # token_info(contract_address)
-    # # wallet_exists = is_wallet_installed()
-    # # print("The value returned is: " + str(wallet_exists))
-    # # result = is_infura_connected()
-    # # if result[0]:       # i.e. success = True
-    # #     st.info("Latest Block: " + str(result[1]))
-    # #     st.info("Balance in WEI: " + str(result[2]))
-    # #     st.info("ether: " + str(result[3]))
-    # #     st.balloons()
-    # # else:
-    # #     st.error("Infura is not connected")
-    # time.sleep(1)
+    # Example: Reading A Contract (Shib Inu) - **************************
+    contract_address = ""
+    token_info(contract_address)
+    # wallet_exists = is_wallet_installed()
+    # print("The value returned is: " + str(wallet_exists))
+    result = is_infura_connected()
+    if result[0]:       # i.e. success = True
+        st.info("Kovan Latest Block: " + str(result[1]))
+        st.info("Kovan Balance in WEI: " + str(result[2]))
+        st.info("From ether: " + str(result[3]))
+        st.balloons()
+    else:
+        st.error("Infura is not connected")
+    time.sleep(1)
 
     # Example: Is Ganache Connected? - **************************
     result_ganache = is_ganache_connected()

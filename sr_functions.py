@@ -15,12 +15,15 @@ import json
 # from web3.auto.infura.kovan import w3
 # w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb'))
 
+# Infura Kovan Project ID: d7336d8a44fc42a1a9a21662bf242bdb
+# Infura EndPoint for above Project ID: https://kovan.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb
+
 # Request eth from here
 infura_url = "https://kovan.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
 web3_infura = Web3(Web3.HTTPProvider(infura_url))
 
-infura_url_main_net = "https://mainnet.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
-web3_infura_url_main_net = Web3(Web3.HTTPProvider(infura_url_main_net))
+# infura_url_main_net = "https://mainnet.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
+# web3_infura_url_main_net = Web3(Web3.HTTPProvider(infura_url_main_net))
 # infura_project_id = "d7336d8a44fc42a1a9a21662bf242bdb"
 
 # Transactions on ganache
@@ -45,9 +48,9 @@ def is_infura_connected():
 
 # def token_info(contract_address):
 #     abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"value","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"sender","type":"address"},{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"value","type":"uint256"}],"name":"burn","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"account","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"spender","type":"address"},{"name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"recipient","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"owner","type":"address"},{"name":"spender","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[{"name":"name","type":"string"},{"name":"symbol","type":"string"},{"name":"decimals","type":"uint8"},{"name":"totalSupply","type":"uint256"},{"name":"feeReceiver","type":"address"},{"name":"tokenOwnerAddress","type":"address"}],"payable":true,"stateMutability":"payable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"from","type":"address"},{"indexed":true,"name":"to","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"owner","type":"address"},{"indexed":true,"name":"spender","type":"address"},{"indexed":false,"name":"value","type":"uint256"}],"name":"Approval","type":"event"}]')
-#     contract = web3_infura_url_main_net.eth.contract(address=contract_address, abi=abi)
+#     contract = web3_infura.eth.contract(address=contract_address, abi=abi)
 #     print(contract)
-#     # total_supply = web3.eth.contract()
+#     # total_supply = web3_infura.eth.contract()
 #     # #.contract(address=contract, abi=abi)
 #     # st.info(contract)
 
