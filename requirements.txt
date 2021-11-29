@@ -1,0 +1,7 @@
+requirements:
+
+import streamlit as st
+from web3 import Web3
+
+Kovan
+infura_url = "https://kovan.infura.io/v3/d7336d8a44fc42a1a9a21662bf242bdb"
