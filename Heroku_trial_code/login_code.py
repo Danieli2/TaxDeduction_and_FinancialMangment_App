@@ -10,7 +10,7 @@ from numpy.core.records import record
 from datetime import datetime, date
 from typing import Any, List
 from dotenv import load_dotenv
-from boto.s3.connection import S3Connection
+#from boto.s3.connection import S3Connection
 
 # Import infura API info(SW: At some point need to figure out how to get Infura API info to talk to app w/o showing it on github)
 #load_dotenv()
