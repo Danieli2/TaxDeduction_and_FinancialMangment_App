@@ -16,10 +16,10 @@ from dotenv import load_dotenv
 load_dotenv()
 #infura_id = S3Connection(os.environ['INFURA_WOW_ID'])
 #infura_private = S3Connection(os.environ['INFURA_WOW_PRIVATE'])
-#infura_id = os.getenv("INFURA_WOW_ID")
-#infura_private = os.getenv("INFURA_WOW_PRIVATE")
-infura_id = os.environ.get("INFURA_WOW_ID")
-infura_private = os.environ.get("INFURA_WOW_PRIVATE")
+infura_id = os.getenv("INFURA_WOW_ID")
+infura_private = os.getenv("INFURA_WOW_PRIVATE")
+#infura_id = os.environ.get("INFURA_WOW_ID")
+#infura_private = os.environ.get("INFURA_WOW_PRIVATE")
 
 # Password Security-Creates hash for user passwords
 def make_hashes(password):
