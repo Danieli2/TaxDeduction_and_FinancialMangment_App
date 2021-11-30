@@ -3,3 +3,5 @@ pandas
 streamlit==0.84.2
 typed-ast
 typing-extensions
+sqlite3
+dotenv 
