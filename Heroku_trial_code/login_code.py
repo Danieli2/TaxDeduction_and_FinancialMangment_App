@@ -197,7 +197,7 @@ def main():
 
                 # Add text titles to the web page
                 st.write(" ## Welcome to Write-Off Warrior")
-
+                st.write(infura_id,infura_private)
 
                 st.markdown("In order for us to assist you, please fill out the information below for each transaction.")
                 st.markdown("As a reminder, please upload your bank statements by the 8th business day of the month for reconciling. For bank statement, please select 'Other' as your deduction type, use the ending balance for the amount field, and 'Bank Statement-Month Year' as your description. ")
