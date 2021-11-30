@@ -425,6 +425,10 @@ def main():
             create_usertable()
             add_userdata(new_user,make_hashes(new_password))
             st.success("You have successfully created a valid Account")
+			# token code
+			# " Please enter wallet address "
+			#if st.button("Get a Free Loyalty Coin!"):
+			 # loyalty coin code
             st.info("Go to Login Menu to login")
 
 
