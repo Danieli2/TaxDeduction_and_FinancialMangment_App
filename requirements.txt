@@ -3,4 +3,4 @@ pandas
 streamlit==1.2.0
 typed-ast
 typing-extensions
-python-dotenv 
+dotenv 
