@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 #from boto.s3.connection import S3Connection
 
 # Import infura API info(SW: At some point need to figure out how to get Infura API info to talk to app w/o showing it on github)
-#load_dotenv()
+load_dotenv()
 #infura_id = S3Connection(os.environ['INFURA_WOW_ID'])
 #infura_private = S3Connection(os.environ['INFURA_WOW_PRIVATE'])
 #infura_id = os.getenv("INFURA_WOW_ID")
