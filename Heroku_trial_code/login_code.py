@@ -18,8 +18,8 @@ from dotenv import load_dotenv
 #infura_private = S3Connection(os.environ['INFURA_WOW_PRIVATE'])
 #infura_id = os.getenv("INFURA_WOW_ID")
 #infura_private = os.getenv("INFURA_WOW_PRIVATE")
-infura_id = os.environ["INFURA_WOW_ID"]
-infura_private = os.environ["INFURA_WOW_PRIVATE"]
+infura_id = os.environ.get["INFURA_WOW_ID"]
+infura_private = os.environ.get["INFURA_WOW_PRIVATE"]
 
 # Password Security-Creates hash for user passwords
 def make_hashes(password):
@@ -196,7 +196,7 @@ def main():
 
                 # Add text titles to the web page
                 st.write(" ## Welcome to Write-Off Warrior")
-				
+
 
                 st.markdown("In order for us to assist you, please fill out the information below for each transaction.")
                 st.markdown("As a reminder, please upload your bank statements by the 8th business day of the month for reconciling. For bank statement, please select 'Other' as your deduction type, use the ending balance for the amount field, and 'Bank Statement-Month Year' as your description. ")
