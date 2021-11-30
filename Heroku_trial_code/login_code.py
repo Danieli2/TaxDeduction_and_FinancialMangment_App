@@ -14,10 +14,12 @@ from boto.s3.connection import S3Connection
 
 # Import infura API info(SW: At some point need to figure out how to get Infura API info to talk to app w/o showing it on github)
 #load_dotenv()
-infura_id = S3Connection(os.environ['INFURA_WOW_ID'])
-infura_private = S3Connection(os.environ['INFURA_WOW_PRIVATE'])
+#infura_id = S3Connection(os.environ['INFURA_WOW_ID'])
+#infura_private = S3Connection(os.environ['INFURA_WOW_PRIVATE'])
 #infura_id = os.getenv("INFURA_WOW_ID")
 #infura_private = os.getenv("INFURA_WOW_PRIVATE")
+infura_id = os.environ["INFURA_WOW_ID"]
+infura_private = os.environ["INFURA_WOW_PRIVATE"]
 
 # Password Security-Creates hash for user passwords
 def make_hashes(password):
