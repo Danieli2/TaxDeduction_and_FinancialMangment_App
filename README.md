@@ -60,6 +60,10 @@ We recommend doing weekly or bi-weekly updates to your account to keep track of 
 ![image](https://user-images.githubusercontent.com/84649228/144177382-64263a91-8a55-47f5-a8f9-c745416371f9.png)
 
 ![image](https://user-images.githubusercontent.com/84649228/144177418-f89f7b88-766a-4121-86ee-2f0f2cf9363e.png)
+    
+![image](https://user-images.githubusercontent.com/84649228/144177683-2ba187f3-1bec-411a-b08e-3d5ac50f14b7.png)
+
+    ![image](https://user-images.githubusercontent.com/84649228/144177720-f21223bd-dc48-4e10-b366-48b9fc38c4af.png)
 
     
 </details>
