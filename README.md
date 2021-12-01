@@ -158,8 +158,15 @@ We are still in the process of developing our coin and connecting it to our app,
 [conda 4.10.3](https://docs.anaconda.com/anaconda/install/index.html) - Package manager, Environment Manager
 
 python 3.7 - included in Anaconda
-
+    
+[Pandas](https://pandas.pydata.org/) - Open source data analysis and manipulation tool
+     
+[Hashlib](https://docs.python.org/3/library/hashlib.html) - Secure hash and message digest algorithms
+    
+[SQLite3](https://docs.python.org/3/library/sqlite3.html) - SQL database engine  
+    
 [Solidity](https://docs.soliditylang.org/en/v0.8.10/) - Implement smart contracts 
+    
     
 </details>
 
