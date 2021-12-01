@@ -173,7 +173,7 @@ python 3.7 - included in Anaconda
 ---
 ## Contributors
 
-Daniel de Leon
+[Daniel de Leon](https://www.linkedin.com/in/daniel-de-leon-6a6421180/)
 
 [Julia Guanzon](https://www.linkedin.com/in/julia-guanzon/)
 
@@ -181,9 +181,9 @@ Saeed Raghib
 
 [Nansamba Ssensalo](https://www.linkedin.com/in/a-nansamba-ssensalo/)
 
-[Sam Weiner](www.linkedin.com/in/samuel-weiner)
+[Sam Weiner](https://www.linkedin.com/in/samuel-weiner/)
 
 
 ## License
 
-<a href="https://github.com/Fintech-Collaboration/global-crypto-behavior/blob/a421d91abfc34f96b1f85b34095d28631a427e89/LICENSE" title="LICENSE">MIT License.</a>
+MIT License
