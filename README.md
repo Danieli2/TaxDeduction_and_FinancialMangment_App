@@ -14,17 +14,24 @@ Our motivation is to help out the people who are industrious, who are too busy l
 <details>
 <summary>Signing Up</summary>
  
-To utilize this application, please go to: http://tax-warrior.herokuapp.com/
+To utilize this application, please go to: http://tax-warrior.herokuapp.com/    
     
- 
-To sign up for Write-Off Warrior, please create a new username and password. 
+<p align="center" width="100%">
+    <img width="80%" src="https://user-images.githubusercontent.com/84649228/144166991-2725d7e2-9c6a-4209-8359-a4c06a5f70fe.png"> 
+</p>
+  
+To sign up for Write-Off Warrior, please create a new username and password. If you are already a member, please use the "Login" screen.
     
-![image](https://user-images.githubusercontent.com/84649228/144166991-2725d7e2-9c6a-4209-8359-a4c06a5f70fe.png)
-    
-![image](https://user-images.githubusercontent.com/84649228/144167451-2c7027d4-8f25-40fc-bd58-2ceb98a9bc22.png)
+<p align="center" width="100%">
+    <img width="80%" src="https://user-images.githubusercontent.com/84649228/144167451-2c7027d4-8f25-40fc-bd58-2ceb98a9bc22.png"> 
+</p>    
 
-![image](https://user-images.githubusercontent.com/84649228/144167502-ad3e2aa6-5e2d-4cf3-a70a-fd14862e7475.png)
-
+When you have successfully logged in, you will be brought to this screen. From here, you can start inputting your tax deductions and start saving your income from taxes! Welcome to the Write-Off Warrior clan!
+    
+<p align="center" width="100%">
+    <img width="80%" src="https://user-images.githubusercontent.com/84649228/144167502-ad3e2aa6-5e2d-4cf3-a70a-fd14862e7475.png"> 
+</p> 
+    
 
    
 </details>
@@ -64,6 +71,8 @@ We recommend doing weekly or bi-weekly updates to your account to keep track of 
 ![image](https://user-images.githubusercontent.com/84649228/144177683-2ba187f3-1bec-411a-b08e-3d5ac50f14b7.png)
 
     ![image](https://user-images.githubusercontent.com/84649228/144177720-f21223bd-dc48-4e10-b366-48b9fc38c4af.png)
+    
+![image](https://user-images.githubusercontent.com/84649228/144177784-47e34cc4-dd9c-4569-8574-e82a5142dc32.png)
 
     
 </details>
