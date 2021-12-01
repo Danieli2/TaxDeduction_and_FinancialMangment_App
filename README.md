@@ -186,4 +186,4 @@ Saeed Raghib
 
 ## License
 
-MIT License
+<a href="https://github.com/Fintech-Collaboration/global-crypto-behavior/blob/a421d91abfc34f96b1f85b34095d28631a427e89/LICENSE" title="LICENSE">MIT License.</a>
