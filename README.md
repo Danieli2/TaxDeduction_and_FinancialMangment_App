@@ -177,7 +177,7 @@ python 3.7 - included in Anaconda
 
 [Julia Guanzon](https://www.linkedin.com/in/julia-guanzon/)
 
-Saeed Raghib
+[Saeed Raghib](https://www.linkedin.com/in/saeedraghib/)
 
 [Nansamba Ssensalo](https://www.linkedin.com/in/a-nansamba-ssensalo/)
 
