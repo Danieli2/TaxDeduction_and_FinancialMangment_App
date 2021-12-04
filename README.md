@@ -16,6 +16,12 @@ Our motivation is to help out the people who are industrious, who are too busy l
  
 To utilize this application, please go to: http://tax-warrior.herokuapp.com/    
     
+If you wish, you can also run the application locally by cloning the repository. The "login_code.py" file is located in the "Heroku_compiled_final_app_code." To use locally, open a terminal in an environment with all the correct systems and libraries, as stated in the Technology section, and run the following code:
+    
+```
+streamlit run login_code.py
+```
+    
 <p align="center" width="100%">
     <img width="80%" src="https://user-images.githubusercontent.com/84649228/144166991-2725d7e2-9c6a-4209-8359-a4c06a5f70fe.png"> 
 </p>
